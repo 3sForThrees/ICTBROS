@@ -1,97 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form</title>
-    
-</head>
-<body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-                <div id="emailError" class="error"></div>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-                <div id="passwordError" class="error"></div>
-            </div>
-            <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required>
-                <div id="confirmPasswordError" class="error"></div>
-            </div>
-            <button type="submit">Log In</button>
-        </form>
-    </div>
-    <script >
-      document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent default form submission
+<html>
+    <head>Login Form</head>
+    <body>
+  <style>
+    .error { color: red; }
+    .success { color: green; }
+    form { max-width: 300px; margin: 20px auto; font-family: Arial, sans-serif; }
+    label { display: block; margin-top: 10px; }
+    input { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+    button { margin-top: 15px; padding: 10px; width: 100%; }
+  </style>
+  <form id="loginForm" novalidate>
+    <label for="email">Email:</label>
+    <input type="email" id="email" required />
+    <div id="emailError" class="error"></div>
 
-    // Get form elements
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
-    const confirmPassword = document.getElementById('confirmPassword');
-    const emailError = document.getElementById('emailError');
-    const passwordError = document.getElementById('passwordError');
-    const confirmPasswordError = document.getElementById('confirmPasswordError');
+    <label for="password">Password:</label>
+    <input type="password" id="password" required />
+    <div id="passwordError" class="error"></div>
 
-    // Reset error messages
-    emailError.style.display = 'none';
-    passwordError.style.display = 'none';
-    confirmPasswordError.style.display = 'none';
-    emailError.textContent = '';
-    passwordError.textContent = '';
-    confirmPasswordError.textContent = '';
+    <label for="confirmPassword">Confirm Password:</label>
+    <input type="password" id="confirmPassword" required />
+    <div id="confirmPasswordError" class="error"></div>
 
-    let isValid = true; // Track form validity
+    <button type="submit">Login</button>
+    <div id="formMessage"></div>
+  </form>
+  <script>
+      const form = document.getElementById('loginForm');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const confirmPasswordInput = document.getElementById('confirmPassword');
 
-    // Email validation
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.value.trim()) {
-        emailError.textContent = 'Email is required';
-        emailError.style.display = 'block';
-        isValid = false;
-    } else if (!emailPattern.test(email.value.trim())) {
-        emailError.textContent = 'Please enter a valid email';
-        emailError.style.display = 'block';
-        isValid = false;
-    }
+const emailError = document.getElementById('emailError');
+const passwordError = document.getElementById('passwordError');
+const confirmPasswordError = document.getElementById('confirmPasswordError');
+const formMessage = document.getElementById('formMessage');
 
-    // Password validation
-    if (!password.value) {
-        passwordError.textContent = 'Password is required';
-        passwordError.style.display = 'block';
-        isValid = false;
-    } else if (password.value.length < 9) {
-        passwordError.textContent = 'Password must be at least 8 characters';
-        passwordError.style.display = 'block';
-        isValid = false;
-    }
+function validateEmail(email) {
+  return email.includes('@');
+}
 
-    // Confirm password validation
-    if (!confirmPassword.value) {
-        confirmPasswordError.textContent = 'Please confirm your password';
-        confirmPasswordError.style.display = 'block';
-        isValid = false;
-    } else if (password.value !== confirmPassword.value) {
-        confirmPasswordError.textContent = 'Passwords do not match';
-        confirmPasswordError.style.display = 'block';
-        isValid = false;
-    }
+function validatePassword(password) {
+  return password.length >= 8;
+}
 
-    // Only proceed if all validations pass
-    if (isValid) {
-        alert('Login successful! ');
-       
-        this.reset(); // Reset the form
-    }
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  let valid = true;
+  emailError.textContent = '';
+  passwordError.textContent = '';
+  confirmPasswordError.textContent = '';
+  formMessage.textContent = '';
+  formMessage.className = '';
+
+  if (!validateEmail(emailInput.value.trim())) {
+    emailError.textContent = 'Email must include "@" symbol.';
+    valid = false;
+  }
+
+  if (!validatePassword(passwordInput.value)) {
+    passwordError.textContent = 'Password must be at least 8 characters long.';
+    valid = false;
+  }
+
+  if (passwordInput.value !== confirmPasswordInput.value) {
+    confirmPasswordError.textContent = 'Passwords do not match.';
+    valid = false;
+  }
+
+  if (valid) {
+    formMessage.textContent = 'Login successful!';
+    formMessage.className = 'success';
+    form.reset();
+  }
 });
-    </script>
+  </script>
+  </body>
 
-</body>
-</html>
+  </html>
