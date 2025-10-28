@@ -1,0 +1,273 @@
+<html>
+    <body>
+        <script>
+            const southEastAsianCountries = [
+  "Brunei",
+  "Cambodia",
+  "Indonesia",
+  "Laos",
+  "Malaysia",
+  "Myanmar",
+  "Philippines",
+  "Singapore",
+  "Thailand",
+  "Timor-Leste",
+  "Vietnam",
+];
+
+
+function createSignUpForm() {
+  const form = document.createElement("form");
+
+
+  const fields = [
+    { label: "First Name", type: "text", name: "firstName" },
+    { label: "Last Name", type: "text", name: "lastName" },
+    { label: "Date of Birth", type: "date", name: "dob" },
+    { label: "Email", type: "email", name: "email" },
+    { label: "Country", type: "select", name: "country", options: southEastAsianCountries },
+    { label: "Phone", type: "tel", name: "phone" },
+    { label: "Password", type: "password", name: "password" },
+    { label: "Confirm Password", type: "password", name: "confirmPassword" },
+  ];
+
+
+  fields.forEach(({ label, type, name, options }) => {
+    const fieldWrapper = document.createElement("div");
+
+
+    const fieldLabel = document.createElement("label");
+    fieldLabel.textContent = label;
+    fieldLabel.htmlFor = name;
+    fieldWrapper.appendChild(fieldLabel);
+
+
+    let input;
+    if (type === "select") {
+      input = document.createElement("select");
+      input.name = name;
+      input.id = name;
+      options.forEach((opt) => {
+        const option = document.createElement("option");
+        option.value = opt;
+        option.textContent = opt;
+        input.appendChild(option);
+      });
+    } else {
+      input = document.createElement("input");
+      input.type = type;
+      input.name = name;
+      input.id = name;
+    }
+    fieldWrapper.appendChild(input);
+
+
+    form.appendChild(fieldWrapper);
+  });
+
+
+  const warning = document.createElement("div");
+  warning.style.color = "red";
+  warning.style.marginTop = "10px";
+  form.appendChild(warning);
+
+
+  const submitBtn = document.createElement("button");
+  submitBtn.type = "submit";
+  submitBtn.textContent = "Sign Up";
+  form.appendChild(submitBtn);
+
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    warning.textContent = "";
+
+
+    const data = {};
+    let emptyField = false;
+    fields.forEach(({ name }) => {
+      const val = form.elements[name].value.trim();
+      if (!val) emptyField = true;
+      data[name] = val;
+    });
+
+
+    if (emptyField) {
+      warning.textContent = "Please fill in all fields.";
+      return;
+    }
+
+
+    // Email validation
+    const email = data.email;
+    const atCount = (email.match(/@/g) || []).length;
+    if (
+      atCount !== 1 ||
+      email === "@" ||
+      email.startsWith("@") ||
+      email.endsWith("@")
+    ) {
+      warning.textContent = "Please enter a valid email address.";
+      return;
+    }
+
+
+    // Password validation
+    const password = data.password;
+    const confirmPassword = data.confirmPassword;
+    if (password !== confirmPassword) {
+      warning.textContent = "Passwords do not match.";
+      return;
+    }
+    if (password.length < 8) {
+      warning.textContent = "Password must be at least 8 characters.";
+      return;
+    }
+    if (!/[a-z]/.test(password)) {
+      warning.textContent = "Password must contain at least one lowercase letter.";
+      return;
+    }
+    if (!/[A-Z]/.test(password)) {
+      warning.textContent = "Password must contain at least one uppercase letter.";
+      return;
+    }
+    if (!/[0-9]/.test(password)) {
+      warning.textContent = "Password must contain at least one number.";
+      return;
+    }
+
+
+    warning.style.color = "green";
+    warning.textContent = "Sign up successful!";
+  });
+
+
+  document.body.appendChild(form);
+}
+
+
+createSignUpForm();
+
+
+        </script>
+        <style>
+            form {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 32px;
+  background: #f8f9fa;
+  border-radius: 16px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+}
+
+
+form > div {
+  margin-bottom: 20px;
+}
+
+
+form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2d3436;
+  font-size: 14.5px;
+}
+
+
+form input,
+form select {
+  width: 100%;
+  padding: 13px 15px;
+  border: 1.5px solid #b2bec3;
+  border-radius: 10px;
+  font-size: 15px;
+  background-color: #fff;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+form input:focus,
+form select:focus {
+  outline: none;
+  border-color: #00b894;
+  box-shadow: 0 0 0 4px rgba(0, 184, 148, 0.15);
+}
+
+
+form select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236c757d'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+
+form button {
+  background: linear-gradient(135deg, #00b894, #00cec9);
+  color: white;
+  border: none;
+  padding: 15px;
+  font-size: 17px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 12px;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+
+form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 184, 148, 0.3);
+}
+
+
+form > div:last-of-type {
+  color: #e17055;
+  font-size: 14px;
+  min-height: 22px;
+  text-align: center;
+  font-weight: 500;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(255, 107, 107, 0.05);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+
+form > div:last-of-type:empty {
+  display: none;
+}
+
+
+/* Success State */
+form.success > div:last-of-type {
+  background: rgba(0, 184, 148, 0.1);
+  color: #00b894;
+  font-weight: 600;
+}
+
+
+/* Responsive */
+@media (max-width: 540px) {
+  form {
+    margin: 20px 15px;
+    padding: 24px;
+  }
+  form input,
+  form select,
+  form button {
+    font-size: 15px;
+  }
+}
+        </style>
+    </body>
+</html>
+
