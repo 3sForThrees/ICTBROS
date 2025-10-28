@@ -1,0 +1,205 @@
+<html>
+<body>
+    <script>
+        document.body.innerHTML = `
+  <form id="contactForm" style="max-width:400px;margin:auto;">
+    <label for="name">Name:</label><br/>
+    <input type="text" id="name" name="name" /><br/><br/>
+    <label for="email">Email:</label><br/>
+    <input type="text" id="email" name="email" /><br/><br/>
+    <label for="subject">Subject:</label><br/>
+    <input type="text" id="subject" name="subject" required /><br/><br/>
+    <label for="message">Message:</label><br/>
+    <textarea id="message" name="message" required></textarea><br/><br/>
+    <button type="submit">Submit</button>
+  </form>
+  <div id="thankYouMessage" style="display:none; text-align:center; margin-top:20px; font-weight:bold;">
+    Thank you for contacting us!
+  </div>
+`;
+
+
+function validateEmail(email) {
+  // Check for exactly one @
+  const atCount = (email.match(/@/g) || []).length;
+  if (atCount !== 1) return false;
+
+
+  // Check that @ is not the only character
+  if (email === '@') return false;
+
+
+  // Validate characters after @ (basic domain check)
+  const parts = email.split('@');
+  if (parts.length !== 2) return false;
+
+
+  const domain = parts[1];
+  // Domain must contain at least one dot and valid characters (letters, numbers, hyphen)
+  if (!/^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+$/.test(domain)) return false;
+
+
+  return true;
+}
+
+
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+
+  const name = this.name.value.trim();
+  const email = this.email.value.trim();
+  const subject = this.subject.value.trim();
+  const message = this.message.value.trim();
+
+
+  if (!validateEmail(email)) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+
+
+  if (!subject) {
+    alert('Subject is required.');
+    return;
+  }
+
+
+  if (!message) {
+    alert('Message is required.');
+    return;
+  }
+
+
+  this.style.display = 'none';
+  document.getElementById('thankYouMessage').style.display = 'block';
+});
+
+
+    </script>
+      <style>
+        #contactForm {
+  max-width: 420px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #f9f9fb;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border: 1px solid #e0e0e0;
+}
+
+
+#contactForm label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+
+#contactForm input[type="text"],
+#contactForm input[type="email"],
+#contactForm textarea {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fff;
+}
+
+
+#contactForm input:focus,
+#contactForm textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+
+#contactForm textarea {
+  min-height: 110px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+
+#contactForm button {
+  background: #2980b9;
+  color: white;
+  border: none;
+  padding: 13px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.3s ease;
+}
+
+
+#contactForm button:hover {
+  background: #3498db;
+}
+
+
+#thankYouMessage {
+  text-align: center;
+  padding: 20px;
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px auto;
+  max-width: 420px;
+  animation: fadeIn 0.6s ease-out;
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* Responsive */
+@media (max-width: 480px) {
+  #contactForm {
+    margin: 20px 15px;
+    padding: 20px;
+  }
+}
+      </style>
+
+
+
+
+
+
+
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
+

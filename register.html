@@ -1,0 +1,237 @@
+<html>
+<body>
+    <script>
+        document.body.innerHTML = `
+  <form id="registrationForm" style="max-width:400px;margin:auto;">
+    <h2>Registration Form</h2>
+    <label>Name:<br><input type="text" id="name" /></label><br><br>
+    <label>Email Address:<br><input type="email" id="email" /></label><br><br>
+    <label>Age:<br><input type="number" id="age" min="0" /></label><br><br>
+    <label>Gender:<br>
+      <select id="gender">
+        <option value="">Select</option>
+        <option value="female">Female</option>
+        <option value="male">Male</option>
+        <option value="other">Other</option>
+      </select>
+    </label><br><br>
+    <label>Date of Birth:<br><input type="date" id="dob" /></label><br><br>
+    <label>Password:<br><input type="password" id="password" /></label><br><br>
+    <label>Confirm Password:<br><input type="password" id="confirmPassword" /></label><br><br>
+    <label><input type="checkbox" id="terms" /> I accept the terms and conditions</label><br><br>
+    <button type="submit">Register</button>
+    <div id="warning" style="color:red;margin-top:10px;"></div>
+  </form>
+`;
+
+
+const form = document.getElementById('registrationForm');
+const warning = document.getElementById('warning');
+
+
+function validateEmail(email) {
+  if (!email) return false;
+  const atCount = (email.match(/@/g) || []).length;
+  if (atCount !== 1) return false;
+  const parts = email.split('@');
+  if (parts[0].length === 0) return false;
+  const domain = parts[1];
+  if (!domain || domain.indexOf('.') === -1) return false;
+  // Check domain valid characters (letters, digits, hyphen, dot)
+  if (!/^[a-zA-Z0-9.-]+$/.test(domain)) return false;
+  // Domain parts cannot start or end with hyphen or dot
+  if (/^[-.]/.test(domain) || /[-.]$/.test(domain)) return false;
+  // No consecutive dots or hyphens in domain
+  if (domain.includes('..') || domain.includes('--')) return false;
+  return true;
+}
+
+
+function validatePassword(password) {
+  if (password.length < 8) return false;
+  if (!/[a-z]/.test(password)) return false;
+  if (!/[A-Z]/.test(password)) return false;
+  if (!/[0-9]/.test(password)) return false;
+  return true;
+}
+
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  warning.textContent = '';
+
+
+  const name = form.name.value.trim();
+  const email = form.email.value.trim();
+  const age = form.age.value.trim();
+  const gender = form.gender.value;
+  const dob = form.dob.value;
+  const password = form.password.value;
+  const confirmPassword = form.confirmPassword.value;
+  const terms = form.terms.checked;
+
+
+  if (!name || !email || !age || !gender || !dob || !password || !confirmPassword) {
+    warning.textContent = 'Please fill all fields.';
+    return;
+  }
+
+
+  if (!validateEmail(email)) {
+    warning.textContent = 'Please enter a valid email address.';
+    return;
+  }
+
+
+  if (!validatePassword(password)) {
+    warning.textContent = 'Password must be at least 8 characters and include one lowercase letter, one uppercase letter, and one number.';
+    return;
+  }
+
+
+  if (password !== confirmPassword) {
+    warning.textContent = 'Passwords do not match.';
+    return;
+  }
+
+
+  if (!terms) {
+    warning.textContent = 'You must accept the terms and conditions.';
+    return;
+  }
+
+
+  warning.style.color = 'green';
+  warning.textContent = 'Registration successful!';
+});
+
+
+    </script>
+    <style>
+        #registrationForm {
+  max-width: 460px;
+  margin: 30px auto;
+  padding: 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  color: white;
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+}
+
+
+#registrationForm h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-weight: 700;
+  font-size: 26px;
+  color: #fff;
+}
+
+
+#registrationForm label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 14.5px;
+}
+
+
+#registrationForm input,
+#registrationForm select {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+}
+
+
+#registrationForm input:focus,
+#registrationForm select:focus {
+  outline: none;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
+}
+
+
+#registrationForm input[type="checkbox"] {
+  width: auto;
+  margin-right: 8px;
+  transform: scale(1.1);
+}
+
+
+#registrationForm label[for="terms"] {
+  display: flex;
+  align-items: center;
+  font-size: 13.5px;
+  cursor: pointer;
+  color: #f0f0f0;
+}
+
+
+#registrationForm button {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 17px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+
+#registrationForm button:hover {
+  background: #ff5252;
+  transform: translateY(-2px);
+}
+
+
+#warning {
+  min-height: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  padding: 8px;
+  border-radius: 6px;
+  margin-top: 12px;
+}
+
+
+#warning:empty {
+  display: none;
+}
+
+
+/* Responsive */
+@media (max-width: 480px) {
+  #registrationForm {
+    margin: 15px;
+    padding: 24px;
+  }
+  #registrationForm h2 {
+    font-size: 22px;
+  }
+}
+    </style>
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>
+
